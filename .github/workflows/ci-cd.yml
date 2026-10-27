@@ -1,0 +1,100 @@
+name: CI/CD
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chillflix-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint, types, audit, and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint application source
+        run: npm run lint
+
+      - name: Check TypeScript types
+        run: npm run typecheck
+
+      - name: Check dependency advisories
+        run: npm audit --audit-level=high
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_BACKEND_URL: http://127.0.0.1:8080
+          NEXT_PUBLIC_SOCKET_BACKEND_URL: http://127.0.0.1:8080
+          NEXT_PUBLIC_CHAT_SOCKET: http://127.0.0.1:8080
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+
+  deploy:
+    name: Deploy Vercel preview or production
+    needs: quality
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ENVIRONMENT: ${{ github.event_name == 'push' && 'production' || 'preview' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@65.4.0
+
+      - name: Validate Vercel secrets
+        run: |
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "::error::Set VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID in GitHub repository secrets."
+            exit 1
+          fi
+
+      - name: Pull Vercel project settings
+        run: vercel pull --yes --environment="$VERCEL_ENVIRONMENT" --token="$VERCEL_TOKEN"
+
+      - name: Build Vercel deployment
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            vercel build --prod --token="$VERCEL_TOKEN"
+          else
+            vercel build --token="$VERCEL_TOKEN"
+          fi
+
+      - name: Deploy to Vercel
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            vercel deploy --prebuilt --prod --yes --token="$VERCEL_TOKEN"
+          else
+            vercel deploy --prebuilt --yes --token="$VERCEL_TOKEN"
+          fi

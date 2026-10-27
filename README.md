@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ChillFlix Frontend
 
-## Getting Started
+Next.js App Router frontend for ChillFlix.
 
-First, run the development server:
+## Local development
+
+Use Node.js 20 and npm:
 
 ```bash
+npm ci
+cp .env.example .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Set the API and Socket.IO URLs in `.env.local` to the corresponding backend services.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Quality checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run typecheck
+npm audit --audit-level=high
+npm run build
+```
 
-## Learn More
+GitHub Actions runs these checks for pull requests and pushes to `master`. The workflow also builds a Vercel preview for same-repository pull requests and deploys production after a successful push to `master`.
 
-To learn more about Next.js, take a look at the following resources:
+## Vercel deployment setup
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create or link the ChillFlix project in Vercel, then add these GitHub repository secrets:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
 
-## Deploy on Vercel
+Configure these environment variables in the Vercel project for both Preview and Production:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `NEXT_PUBLIC_API_BACKEND_URL`
+- `NEXT_PUBLIC_SOCKET_BACKEND_URL`
+- `NEXT_PUBLIC_CHAT_SOCKET`
+- `NEXT_PUBLIC_APP_URL`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The `NEXT_PUBLIC_*` values are embedded in the browser bundle during build, so set them in Vercel before the first deployment. Do not put credentials or private backend secrets in these variables.
+
+After pushing the repository to GitHub, protect `master` and require the `quality` job to pass before merging. Preview deployments are skipped for pull requests from forks because GitHub does not expose repository secrets to those workflows.
