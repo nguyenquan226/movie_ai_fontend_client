@@ -1,0 +1,15 @@
+export const VNPAY_ERROR_MESSAGES: Record<string, string> = {
+  "00": "Thanh toán thành công! Gói VIP của bạn đã được kích hoạt.",
+  "07": "Thanh toán thành công nhưng hệ thống đang kiểm tra giao dịch bất thường. Vui lòng chờ xác nhận.",
+  "09": "Không thể thanh toán: Tài khoản ngân hàng của bạn chưa đăng ký InternetBanking.",
+  "10": "Không thể thanh toán: Bạn đã nhập sai thông tin thẻ quá số lần cho phép.",
+  "11": "Giao dịch hết hạn. Vui lòng thanh toán lại để đăng ký gói VIP.",
+  "12": "Không thể thanh toán: Tài khoản hoặc thẻ của bạn đã bị khóa.",
+  "13": "Sai mã OTP. Vui lòng kiểm tra lại và thử lại.",
+  "24": "Bạn đã hủy giao dịch.",
+  "51": "Tài khoản không đủ số dư để thanh toán gói VIP.",
+  "65": "Bạn đã vượt quá hạn mức giao dịch trong ngày.",
+  "75": "Hệ thống ngân hàng đang bảo trì. Vui lòng thử lại sau.",
+  "79": "Sai mật khẩu thanh toán quá số lần cho phép. Vui lòng thử lại sau.",
+  "99": "Đã xảy ra lỗi trong quá trình thanh toán. Vui lòng thử lại sau.",
+};
