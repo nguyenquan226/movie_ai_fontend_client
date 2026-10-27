@@ -36,8 +36,8 @@ export const useDirectorStore = create<DirectorStoreState & DirectorAction>()(
       try {
         const res = await directorServices.getDirectorById(directorId);
         set({ director: res.data || null });
-      } catch (error: any) {
-        set({ error: error.message || "Error fetching director details" });
+      } catch (error: unknown) {
+        set({ error: error instanceof Error ? error.message : "Error fetching director details" });
       } finally {
         set({ isLoadingDirector: false });
       }
@@ -48,8 +48,8 @@ export const useDirectorStore = create<DirectorStoreState & DirectorAction>()(
       try {
         const res = await directorServices.getDirectorBySlug(directorSlug);
         set({ director: res.data || null });
-      } catch (error: any) {
-        set({ error: error.message || "Error fetching director details" });
+      } catch (error: unknown) {
+        set({ error: error instanceof Error ? error.message : "Error fetching director details" });
       } finally {
         set({ isLoadingDirector: false });
       }
@@ -65,8 +65,8 @@ export const useDirectorStore = create<DirectorStoreState & DirectorAction>()(
           filmDirectorData: data,
           films,
         });
-      } catch (error: any) {
-        set({ error: error.message || "Error fetching film director data" });
+      } catch (error: unknown) {
+        set({ error: error instanceof Error ? error.message : "Error fetching film director data" });
       } finally {
         set({ isLoadingFilmDirector: false });
       }
@@ -83,8 +83,8 @@ export const useDirectorStore = create<DirectorStoreState & DirectorAction>()(
           filmDirectorData: data,
           films,
         });
-      } catch (error: any) {
-        set({ error: error.message || "Error fetching film director data" });
+      } catch (error: unknown) {
+        set({ error: error instanceof Error ? error.message : "Error fetching film director data" });
       } finally {
         set({ isLoadingFilmDirector: false });
       }

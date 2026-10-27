@@ -32,8 +32,8 @@ export const useProducerStore = create<ProducerStoreState & ProducerAction>()((s
         try {
             const res = await filmProducerServices.getFilmProducerId(Number(producerId))
             set({ producer: res.data.result.producer || null })
-        } catch (error: any) {
-            set({ error: error.message || "Error fetching producer details" })
+        } catch (error: unknown) {
+            set({ error: error instanceof Error ? error.message : "Error fetching producer details" })
         } finally {
             set({ isLoadingProducer: false })
         }
@@ -48,8 +48,8 @@ export const useProducerStore = create<ProducerStoreState & ProducerAction>()((s
                 filmProducerData: data,
                 films,
             })
-        } catch (error: any) {
-            set({ error: error.message || "Error fetching film producer data" })
+        } catch (error: unknown) {
+            set({ error: error instanceof Error ? error.message : "Error fetching film producer data" })
         } finally {
             set({ isLoadingFilmProducer: false })
         }

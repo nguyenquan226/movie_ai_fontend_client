@@ -3,13 +3,19 @@
 import { partServices } from "@/services/partService";
 import { useFilmRouter } from "@/hooks/filmRouter";
 import { useFilmStore } from "@/stores/filmStore";
+type FilmNavigationData = {
+  filmId: string;
+  title: string;
+  slug: string;
+  type?: { keyMap?: string } | null;
+};
 
 export function useFilmClick() {
   const { goFilmDetail, goPlayerFilm } = useFilmRouter();
   const setIsLoading = (isLoading: boolean) =>
     useFilmStore.setState({ isLoading });
 
-  const handleFilmClick = async (film: any) => {
+  const handleFilmClick = async (film: FilmNavigationData) => {
     if (!film?.filmId) {
       console.warn("Lost filmId:", film);
       return;
@@ -48,8 +54,8 @@ export function useFilmClick() {
         return;
       }
       goFilmDetail(film.slug);
-    } catch (err: any) {
-      console.error("Error in handleFilmClick:", err?.message || err);
+    } catch (err: unknown) {
+      console.error("Error in handleFilmClick:", err instanceof Error ? err.message : err);
       goFilmDetail(film.slug);
     } finally {
       setIsLoading(false);

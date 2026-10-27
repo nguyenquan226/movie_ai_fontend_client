@@ -2,9 +2,9 @@ import { MainSection } from "./_components/mainSection";
 
 
 interface LiveRoomPageProps {
-  params: {
+  params: Promise<{
     roomId: string,
-  }
+  }>
 }
 
 const LiveRoomPage = async ({ params }: LiveRoomPageProps) => {

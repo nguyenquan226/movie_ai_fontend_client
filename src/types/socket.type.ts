@@ -2,7 +2,7 @@
 import { BackendComment, User } from "./comment.type";
 
 // Assuming Comment interface based on backend entity
-export interface NewCommentData extends BackendComment {}
+export type NewCommentData = BackendComment;
 
 export interface ReplyCommentData {
   parentId: string;

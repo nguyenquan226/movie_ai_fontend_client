@@ -10,11 +10,11 @@ import { userFavoriteStore } from "@/stores/favoriteStore";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/authStore";
 
-const getPosterUrl = (film: any): string => {
+const getPosterUrl = (film: FilmDetailRes): string => {
   if (film.posterUrl) return film.posterUrl;
   if (film.filmImages && Array.isArray(film.filmImages)) {
     const posterImage = film.filmImages.find(
-      (img: any) => img.type === "poster"
+      (img) => img.type === "poster"
     );
     if (posterImage) return posterImage.url;
     if (film.filmImages.length > 0) return film.filmImages[0].url;
@@ -51,7 +51,7 @@ export default function SeriesPage() {
         const meta = response.data?.meta;
 
         const transformedFilms = filmList.map(
-          (film: any) =>
+          (film) =>
           ({
             filmId: film.filmId,
             id: film.filmId,
@@ -64,7 +64,7 @@ export default function SeriesPage() {
             slug: film.slug,
             genres:
               film.genres
-                ?.map((genre: any) =>
+                ?.map((genre) =>
                   typeof genre === "string"
                     ? genre
                     : genre.valueVi || genre.valueEn || genre.keyMap || ""
@@ -72,7 +72,7 @@ export default function SeriesPage() {
                 .filter(Boolean) || [],
             badges: [
               { text: "PD", color: "bg-blue-600" },
-              { text: film.type?.valueVi || "Series", color: "bg-green-600" },
+              { text: typeof film.type === "string" ? film.type : film.type?.valueVi || "Series", color: "bg-green-600" },
             ],
             episodes: "Phần 1",
           } as FilmDetailRes)

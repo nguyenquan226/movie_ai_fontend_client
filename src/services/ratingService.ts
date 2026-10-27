@@ -13,11 +13,11 @@ export const ratingService = {
     filmId: string;
     ratingValue: number;
     content?: string;
-  }) => {
+  }): Promise<IBackendRes<unknown>> => {
     return privateAxios.post("/rating/create-rating", data);
   },
 
-  deleteRating: (ratingId: string) => {
+  deleteRating: (ratingId: string): Promise<IBackendRes<unknown>> => {
     return privateAxios.delete(`/rating/delete-rating/${ratingId}`);
   },
 
@@ -25,7 +25,7 @@ export const ratingService = {
     ratingId: string,
     reason: string,
     description?: string
-  ): Promise<IBackendRes<any>> => {
+  ): Promise<IBackendRes<null>> => {
     return privateAxios.post(`/report`, {
       reportType: "RATING",
       targetId: ratingId,

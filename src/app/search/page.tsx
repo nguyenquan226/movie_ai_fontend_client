@@ -10,22 +10,13 @@ import { userServices } from "@/services";
 import { LayoutPanelLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores/authStore";
+import type { FilmDetailRes } from "@/types/filmType";
 
-interface SearchResult {
-  result: any[];
-  meta: {
-    current: number;
-    pageSize: number;
-    pages: number;
-    total: number;
-  };
-}
-
-const getPosterUrl = (film: any): string => {
+const getPosterUrl = (film: FilmDetailRes): string => {
   if (film.posterUrl) return film.posterUrl;
   if (film.filmImages && Array.isArray(film.filmImages)) {
     const posterImage = film.filmImages.find(
-      (img: any) => img.type === "poster"
+      (img) => img.type === "poster"
     );
     if (posterImage) return posterImage.url;
     if (film.filmImages.length > 0) return film.filmImages[0].url;
@@ -35,12 +26,11 @@ const getPosterUrl = (film: any): string => {
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<FilmDetailRes[]>([]);
   const [loading, setLoading] = useState(false);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [meta, setMeta] = useState<any>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const { favoriteList, fetchFavoriteList } = userFavoriteStore();
   const { isAuthenticated } = useAuthStore();
@@ -78,12 +68,11 @@ export default function SearchPage() {
       console.log("Search response:", response);
       if (response.data) {
         setResults(
-          (response.data.result || []).map((film: any) => ({
+          (response.data.result || []).map((film) => ({
             ...film,
             posterUrl: getPosterUrl(film),
           }))
         );
-        setMeta(response.data.meta);
         setTotalItems(response.data.meta?.total || 0);
         setCurrentPage(response.data.meta?.current || 1);
         setTotalPages(response.data.meta?.pages || 0);
@@ -211,7 +200,7 @@ export default function SearchPage() {
           ) : (
             <div className="text-center py-12">
               <p className="text-muted-foreground">
-                Chọn bộ lọc và nhấn "Lọc kết quả" để xem phim
+                Chọn bộ lọc và nhấn &quot;Lọc kết quả&quot; để xem phim
               </p>
             </div>
           )}

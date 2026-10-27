@@ -3,6 +3,7 @@ import { useAuthStore } from "@/stores/authStore"
 import { useState, useEffect } from "react"
 import { useNotificationStore } from "@/stores/notificationStore"
 import { useRouter } from "next/navigation"
+import type { Notification } from "@/types/notification.type"
 
 type TabType = "film" | "community" | "system"
 
@@ -35,7 +36,7 @@ export default function Notications() {
     const currentNotifications = allCurrentNotifications.slice(0, visibleCount)
     const hasMoreLocal = visibleCount < allCurrentNotifications.length
 
-    const getNotificationIcon = (notification: any) => {
+    const getNotificationIcon = (notification: Notification) => {
         if (notification.type === 'reply') return 'fas fa-comment text-foreground'
         if (notification.type === 'reaction') {
             return notification.result?.reactionType === 'DISLIKE' ? 'fas fa-thumbs-down text-red-500' : 'fas fa-thumbs-up text-primary'
@@ -71,7 +72,7 @@ export default function Notications() {
         }, 800)
     }
 
-    const navigateToFilm = async (slug: string | undefined, filmId: number, commentId: string) => {
+    const navigateToFilm = async (slug: string | undefined, filmId: string, commentId: string) => {
         if (slug) {
             router.push(`/film-detail/${slug}?commentId=${commentId}`)
             return
@@ -79,8 +80,8 @@ export default function Notications() {
 
         try {
             const filmServices = (await import('@/services/filmService')).default
-            const filmData = await filmServices.getFilmById(String(filmId)) as any
-            const fetchedSlug = filmData?.data?.film?.slug || filmData?.data?.slug
+            const filmData = await filmServices.getFilmById(String(filmId))
+            const fetchedSlug = filmData?.data?.film?.slug
             if (fetchedSlug) {
                 router.push(`/film-detail/${fetchedSlug}?commentId=${commentId}`)
             }
@@ -89,7 +90,7 @@ export default function Notications() {
         }
     }
 
-    const handleNotificationClick = async (notification: any) => {
+    const handleNotificationClick = async (notification: Notification) => {
         try {
             if (!notification.isRead) {
                 await markAsRead(notification.notificationId)
@@ -105,6 +106,7 @@ export default function Notications() {
             if (!notification.result?.filmId) return
 
             const commentId = notification.result.commentId || notification.result.parentId
+            if (!commentId) return
             const currentPath = window.location.pathname
             const isOnSameFilm = notification.result?.slug && currentPath.includes(`/film-detail/${notification.result.slug}`)
 
@@ -118,7 +120,7 @@ export default function Notications() {
         }
     }
 
-    const CheckAvatar = (notification: any) => {
+    const CheckAvatar = (notification: Notification) => {
         if (notification.replier && notification.replier.avatarUrl) {
             return notification.replier.avatarUrl;
         }

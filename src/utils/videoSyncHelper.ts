@@ -3,8 +3,8 @@ import Artplayer from 'artplayer';
 export async function handleAutoplay(art: Artplayer): Promise<void> {
   try {
     await art.play();
-  } catch (error: any) {
-    if (error.name === 'NotAllowedError') {
+  } catch (error: unknown) {
+    if (error instanceof Error && error.name === 'NotAllowedError') {
       console.log('Autoplay blocked, trying with muted...');
       art.muted = true;
       await art.play();

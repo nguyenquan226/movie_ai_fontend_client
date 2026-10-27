@@ -1,11 +1,17 @@
 "use client";
-import { IUser } from "@/types/user.type";
 import { Check, Calendar, Crown, Zap } from "lucide-react";
 import { formatPrice } from "@/utils/formatPrice";
 import { Button } from "@/components/ui/button";
+import type { plan } from "@/types/subcsciptionPlan.type";
+
+type VipPlanDetails = Partial<plan> & {
+  vipStartDate?: string;
+  vipExpiryDate?: string;
+  durationTypeCode?: string;
+};
 
 interface VipPlanInfoProps {
-  vipPlanUser: any;
+  vipPlanUser: VipPlanDetails | undefined;
   onRenew?: () => void;
   onUpgrade?: () => void;
 }

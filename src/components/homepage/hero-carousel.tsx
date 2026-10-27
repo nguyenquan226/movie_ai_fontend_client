@@ -14,11 +14,11 @@ import { useAuthStore } from "@/stores/authStore";
 import { toast } from "sonner";
 import { useFilmStore } from "@/stores/filmStore";
 
-const getPosterUrl = (film: any): string => {
+const getPosterUrl = (film: FilmDetailRes): string => {
   if (film.posterUrl) return film.posterUrl; // fallback for old format
   if (film.filmImages && Array.isArray(film.filmImages)) {
     const posterImage = film.filmImages.find(
-      (img: any) => img.type === "backdrop"
+      (img) => img.type === "backdrop"
     );
     if (posterImage) return posterImage.url;
     // fallback to first image if poster not found
@@ -72,8 +72,8 @@ export default function HeroCarousel() {
       try {
         const res = await filmService.getHeroSlides();
 
-        const heroFilms = res.data.result.map(
-          (film: any) =>
+        const heroFilms = (res.data?.result || []).map(
+          (film) =>
           ({
             filmId: film.filmId,
             title: film.title,
@@ -137,7 +137,7 @@ export default function HeroCarousel() {
     setCurrentSlide(index);
   };
 
-  const getGenreText = (genre: any): string => {
+  const getGenreText = (genre: NonNullable<FilmDetailRes["genres"]>[number]): string => {
     if (typeof genre === "string") return genre;
     return genre?.valueVi || genre?.valueEn || "";
   };
@@ -259,7 +259,7 @@ export default function HeroCarousel() {
               ) : null}
               {slide.age && (
                 <div className="rounded border border-border bg-background/40 px-2 py-1 text-xs text-foreground backdrop-blur-sm">
-                  {slide.age.valueVi}
+                  {typeof slide.age === "string" ? slide.age : slide.age.valueVi}
                 </div>
               )}
               {slide.year && (
@@ -285,7 +285,7 @@ export default function HeroCarousel() {
                     key={idx}
                     className="rounded border border-border/70 bg-background/40 px-2 py-1 text-xs font-medium text-foreground transition-colors hover:border-primary"
                     onClick={() => {
-                      goGenre(genre.valueEn);
+                      goGenre(typeof genre === "string" ? genre : genre.valueEn || genre.keyMap || "");
                     }}
                   >
                     {getGenreText(genre)}

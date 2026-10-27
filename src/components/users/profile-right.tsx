@@ -27,7 +27,7 @@ export default function ProfileRight() {
 
   const handleSave = async () => {
     if (tempName.trim() && authUser) {
-      const updatedUser: any = {
+      const updatedUser = {
         userId: authUser.userId,
         fullName: tempName.trim(),
         genderCode: selectedGender,
@@ -38,7 +38,7 @@ export default function ProfileRight() {
         const res = await userServices.CallUpdateProfile(updatedUser);
         console.log("check res", res);
         if (res && res.EC === 1) {
-          setAuthUser(updatedUser);
+          setAuthUser({ ...authUser, ...updatedUser });
           await new Promise((r) => setTimeout(r, 500));
           toast.success(AuthenticationsMessage.updateSucess);
         } else {

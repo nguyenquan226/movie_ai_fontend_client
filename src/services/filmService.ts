@@ -5,6 +5,7 @@ const baseURL = process.env.NEXT_PUBLIC_API_BACKEND_URL;
 
 import { IBackendRes, RatingRes } from "@/types/backend.type";
 import { FilmDetailRes, IFilmSuggestRes, IFilmVipRes } from "@/types/film.type";
+import type { FilmListData } from "@/types/filmType";
 
 const filmServices = {
   updateView: (filmId: string): Promise<IBackendRes<unknown>> => {
@@ -41,22 +42,22 @@ const filmServices = {
     return publicAxios.get('/films/film-vip');
   },
 
-  async getAll() {
+  async getAll(): Promise<IBackendRes<FilmListData>> {
     return publicAxios.get(`${baseURL}/films?current=1&pageSize=10`);
   },
-  async getById(id: string) {
+  async getById(id: string): Promise<IBackendRes<FilmDetailRes>> {
     return publicAxios.get(`${baseURL}/films/${id}`);
   },
-  async getHeroSlides() {
+  async getHeroSlides(): Promise<IBackendRes<FilmListData>> {
     return publicAxios.get(`${baseURL}/films?current=1&pageSize=5`);
   },
-  async getByCountry(countryName: string, page: number = 1, pageSize: number = 20) {
+  async getByCountry(countryName: string, page: number = 1, pageSize: number = 20): Promise<IBackendRes<FilmListData>> {
     return publicAxios.get(`/films/by-country/${countryName}?current=${page}&pageSize=${pageSize}`);
   },
-  async getByGenre(genreName: string, page: number = 1, pageSize: number = 20) {
+  async getByGenre(genreName: string, page: number = 1, pageSize: number = 20): Promise<IBackendRes<FilmListData>> {
     return publicAxios.get(`/films/by-genre/${genreName}?current=${page}&pageSize=${pageSize}`);
   },
-  async getByType(typeValue: string, page = 1, pageSize = 20) {
+  async getByType(typeValue: string, page = 1, pageSize = 20): Promise<IBackendRes<FilmListData>> {
     return publicAxios.get(`/films/by-type/${typeValue}?current=${page}&pageSize=${pageSize}`)
   },
   async searchFilms(
@@ -71,7 +72,7 @@ const filmServices = {
     sort?: string,
     page = 1,
     pageSize = 20,
-  ) {
+  ): Promise<IBackendRes<FilmListData>> {
     const params = new URLSearchParams()
 
     if (filters.country) params.append("country", filters.country)

@@ -16,6 +16,13 @@ export interface IUser {
   }[];
 }
 
+export interface UpdateUserProfile {
+  userId: number | null;
+  fullName: string;
+  genderCode: string;
+  avatarUrl?: string;
+}
+
 export interface IFilmList {
   favorites: filmInUserPage[];
 }

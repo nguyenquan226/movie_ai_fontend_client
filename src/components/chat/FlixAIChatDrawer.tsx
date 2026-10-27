@@ -60,8 +60,8 @@ export default function FlixAIChatDrawer() {
       const res = await geminiService.callChat(input);
       console.log("chekc res", res.data.answer);
       return res.data.answer;
-    } catch (error: any) {
-      console.log("Error from chat response", error.message);
+    } catch (error: unknown) {
+      console.log("Error from chat response", error instanceof Error ? error.message : error);
       return "";
     }
   };

@@ -6,13 +6,19 @@ export interface NotificationResult {
   filmTitle?: string;
   reason?: string;
   note?: string;
+  reactionType?: "LIKE" | "DISLIKE";
+}
+
+export interface NotificationData extends NotificationResult {
+  avatarUrl?: string;
+  userId?: number;
 }
 
 export interface Notification {
   notificationId: number;
   type: "reply" | "reaction" | "system" | "warning" | "violation_warning" | "info" | "hidden_comment" | "report" | "report_result";
   message: string;
-  data?: any;
+  data?: NotificationData;
   isRead: boolean;
   replier?: {
     userId: number;
@@ -21,6 +27,8 @@ export interface Notification {
     avatarUrl?: string;
   };
   result?: NotificationResult;
+  avatarUrl?: string;
+  userId?: number;
   createdAt: string;
   updatedAt: string;
 }

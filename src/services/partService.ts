@@ -1,12 +1,12 @@
 import publicAxios from "@/lib/publicAxios";
 
 import { IBackendRes } from "@/types/backend.type";
-import { PartData } from "@/types/part.type";
+import { PartDetail, PartRes } from "@/types/part.type";
 
 export const partServices = {
-  getPartsByFilmId: (filmId: string): Promise<IBackendRes<PartData>> => {
+  getPartsByFilmId: (filmId: string): Promise<IBackendRes<PartRes>> => {
     return publicAxios.post("/parts/film", { filmId })
   },
 
-  getPartById: (id: string): Promise<IBackendRes<DetailPart>> => publicAxios.get(`/parts/${id}`),
+  getPartById: (id: string): Promise<IBackendRes<PartDetail>> => publicAxios.get(`/parts/${id}`),
 };

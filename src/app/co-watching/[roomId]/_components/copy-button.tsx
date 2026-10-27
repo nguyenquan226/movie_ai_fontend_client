@@ -15,8 +15,8 @@ export const CopyButton = () => {
     if (!pathname) return;
 
     setIsCopied(true);
-    const host = process.env.HOST || 'http://localhost:3000';
-    navigator.clipboard.writeText(`${host}/${pathname}`);
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+    navigator.clipboard.writeText(new URL(pathname, baseUrl).toString());
     setTimeout(() => {
       setIsCopied(false);
     }, 1000);

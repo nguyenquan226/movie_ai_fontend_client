@@ -9,6 +9,7 @@ import {
   CreateCommentData,
   CommentReactionType,
   CountCommentsData,
+  ReactCommentData,
 } from "@/types/comment.type";
 
 
@@ -50,7 +51,7 @@ export const CommentServices = {
   reactToComment: (
     commentId: string,
     type: CommentReactionType
-  ): Promise<IBackendRes<any>> => {
+  ): Promise<IBackendRes<ReactCommentData>> => {
     return privateAxios.post(`/comment-reactions/create-reaction`, {
       commentId,
       type,
@@ -61,7 +62,7 @@ export const CommentServices = {
     commentId: string,
     reason: string,
     description?: string
-  ): Promise<IBackendRes<any>> => {
+  ): Promise<IBackendRes<null>> => {
     return privateAxios.post(`/report`, {
       reportType: "COMMENT",
       targetId: commentId,

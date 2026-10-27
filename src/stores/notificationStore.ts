@@ -41,7 +41,7 @@ export const useNotificationStore = create<
 
       if (Array.isArray(actualData)) {
         const dbNotifications = actualData.filter(
-          (n: any) => n.notificationId > 0
+          (n) => n.notificationId > 0
         );
 
         set({

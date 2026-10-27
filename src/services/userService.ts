@@ -8,6 +8,7 @@ import {
   IPlaylistDetail,
   IUpdatePlaylist,
   IUser,
+  UpdateUserProfile,
 } from "@/types/user.type";
 import { User } from "lucide-react";
 import { toast } from "sonner";
@@ -89,7 +90,7 @@ export const userServices = {
     return privateAxios.delete(`/playlists/remove-playlist/${playlistId}`);
   },
 
-  CallUpdateProfile: (updateUserInfor: any): Promise<IBackendRes<null>> => {
+  CallUpdateProfile: (updateUserInfor: UpdateUserProfile): Promise<IBackendRes<null>> => {
     return privateAxios.patch("/users/update-profile", updateUserInfor);
   },
 };

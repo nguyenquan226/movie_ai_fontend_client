@@ -72,7 +72,7 @@ export default function VipUpgradeContent() {
   const fetchUserPlanInfor = async () => {
     const res = await subsciptionPlanService.getUserVipPlanInfor();
     if (res && res.EC === 1) {
-      setVipPlan(res.data.plan);
+      setVipPlan(res.data?.plan);
     }
   };
 
@@ -83,9 +83,9 @@ export default function VipUpgradeContent() {
     }
     if (selected?.planId !== undefined) {
       const res = await paymentService.createPaymentURL(selected?.planId);
-      if (res && res.EC === 1) {
+      if (res?.EC === 1) {
         setIsLoading(true);
-        const redirectURL = res.data?.metadata.redirectUrl;
+        const redirectURL = res.data?.metadata?.redirectUrl;
         if (redirectURL) {
           localStorage.setItem("from_VNPAY", "true");
           router.push(redirectURL);

@@ -1,10 +1,11 @@
 import { create } from "zustand";
 
-import { FilmDetail, FilmImages, FilmDetailRes } from "@/types/film.type";
+import { FilmDetail, FilmImages } from "@/types/film.type";
+import type { FilmDetailRes as FilmListItem } from "@/types/filmType";
 import filmServices from "@/services/filmService";
 import { partServices } from "@/services";
-import { PartData, RatingRes } from "@/types/backend.type";
-import { PartDetail } from "@/types/part.type";
+import { RatingRes } from "@/types/backend.type";
+import { PartDetail, PartRes } from "@/types/part.type";
 
 interface FilmState {
   isLoading: boolean;
@@ -15,14 +16,14 @@ interface FilmState {
   loadingGenre: boolean
   loadingHeroSlides: boolean
   filmData: FilmDetail | null;
-  partDetail: PartData | null;
+  partDetail: PartRes | null;
   ratingData: RatingRes | null;
   partData: PartDetail[] | null;
-  koreanFilms: FilmDetailRes[]
-  chineseFilms: FilmDetailRes[]
-  usukFilms: FilmDetailRes[]
-  genreFilms: FilmDetailRes[]
-  heroFilms: FilmDetailRes[]
+  koreanFilms: FilmListItem[]
+  chineseFilms: FilmListItem[]
+  usukFilms: FilmListItem[]
+  genreFilms: FilmListItem[]
+  heroFilms: FilmListItem[]
   totalPages: number
 }
 

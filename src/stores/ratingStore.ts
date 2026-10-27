@@ -27,8 +27,8 @@ interface RatingStoreActions {
     filmId: string;
     ratingValue: number;
     content?: string;
-  }) => Promise<void>;
-  deleteRating: (ratingId: string) => Promise<void>;
+  }) => Promise<{ EC: number; EM: string }>;
+  deleteRating: (ratingId: string) => Promise<{ EC: number; EM: string }>;
   updateRatingRealtime: (data: {
     filmId: string;
     averageRating: number;
@@ -51,10 +51,10 @@ export const useRatingStore = create<RatingStoreState & RatingStoreActions>(
     fetchRatings: async (filmId: string) => {
       set({ isLoading: true, error: null });
       try {
-        const response = (await ratingService.getRatingsByFilm(filmId)) as any;
+        const response = await ratingService.getRatingsByFilm(filmId);
 
         if (response?.EC === 1) {
-          const result = response.result || response.data?.result;
+          const result = response.data?.result;
 
           if (result) {
             set({
@@ -77,10 +77,10 @@ export const useRatingStore = create<RatingStoreState & RatingStoreActions>(
             isLoading: false,
           });
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("fetchRatings error", error);
         set({
-          error: error?.message || "Error fetching ratings",
+          error: error instanceof Error ? error.message : "Error fetching ratings",
           isLoading: false,
         });
       }
@@ -89,7 +89,7 @@ export const useRatingStore = create<RatingStoreState & RatingStoreActions>(
     createRating: async (data) => {
       set({ isLoading: true, error: null });
       try {
-        const response = (await ratingService.createRating(data)) as any;
+        const response = await ratingService.createRating(data);
 
         if (response.EC === 1) {
           set({ isLoading: false });
@@ -101,10 +101,10 @@ export const useRatingStore = create<RatingStoreState & RatingStoreActions>(
           });
           throw new Error(response.EM || "Error creating rating");
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("createRating error", error);
         set({
-          error: error?.message || "Error creating rating",
+          error: error instanceof Error ? error.message : "Error creating rating",
           isLoading: false,
         });
         throw error;
@@ -114,7 +114,7 @@ export const useRatingStore = create<RatingStoreState & RatingStoreActions>(
     deleteRating: async (ratingId: string) => {
       set({ isLoading: true, error: null });
       try {
-        const response = (await ratingService.deleteRating(ratingId)) as any;
+        const response = await ratingService.deleteRating(ratingId);
 
         if (response.EC === 1) {
           set({ isLoading: false });
@@ -126,10 +126,10 @@ export const useRatingStore = create<RatingStoreState & RatingStoreActions>(
           });
           throw new Error(response.EM || "Error deleting rating");
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("deleteRating error", error);
         set({
-          error: error?.message || "Error deleting rating",
+          error: error instanceof Error ? error.message : "Error deleting rating",
           isLoading: false,
         });
         throw error;

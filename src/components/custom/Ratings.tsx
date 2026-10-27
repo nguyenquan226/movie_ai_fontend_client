@@ -31,6 +31,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { ratingService } from "@/services/ratingService";
+import type { RatingItem } from "@/types/backend.type";
 
 export default function Ratings() {
     const { filmData } = useFilmStore();
@@ -80,20 +81,20 @@ export default function Ratings() {
     useEffect(() => {
         if (!filmId) return;
 
-        const handleRatingUpdated = (data: any) => {
+        const handleRatingUpdated = (data: { filmId: string; averageRating: number; totalRatings: number; newRating?: RatingItem }) => {
             if (data.filmId === filmId) {
                 updateRatingRealtime(data);
             }
         };
 
-        const handleRatingDeleted = (data: any) => {
+        const handleRatingDeleted = (data: { filmId: string; ratingId: string }) => {
 
             if (data.filmId === filmId) {
                 deleteRatingRealtime(data.ratingId);
             }
         };
 
-        const handleRatingHidden = (data: any) => {
+        const handleRatingHidden = (data: { filmId: string; ratingId: string; isHidden: boolean }) => {
             if (data.filmId !== filmId) return;
             if (data.isHidden) {
                 deleteRatingRealtime(data.ratingId);
@@ -123,7 +124,7 @@ export default function Ratings() {
         if (rating === 0) return;
 
         try {
-            const response: any = await createRating({
+            const response = await createRating({
                 filmId,
                 ratingValue: rating,
                 content: comment.trim() || undefined,
@@ -131,18 +132,18 @@ export default function Ratings() {
             setComment("");
             setRating(0);
             toast.success(response?.EM || "Đánh giá thành công!");
-        } catch (error: any) {
-            toast.error(error.message || "Không thể gửi đánh giá. Vui lòng thử lại.");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Không thể gửi đánh giá. Vui lòng thử lại.");
         }
     };
 
     const handleDelete = async (ratingId: string) => {
         if (!isAuthenticated) return;
         try {
-            const response: any = await deleteRating(ratingId);
+            const response = await deleteRating(ratingId);
             toast.success(response?.EM || "Xóa đánh giá thành công");
-        } catch (error: any) {
-            toast.error(error.message || "Không thể xóa đánh giá. Vui lòng thử lại.");
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Không thể xóa đánh giá. Vui lòng thử lại.");
         }
     };
 

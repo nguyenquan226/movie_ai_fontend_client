@@ -94,4 +94,11 @@ export interface CountCommentsData {
   totalComments: number;
 }
 
+export interface ReactCommentData {
+  commentId: string;
+  totalLike: number;
+  totalDislike: number;
+  userReaction: CommentReactionType | null;
+}
+
 export type CommentReactionType = "LIKE" | "DISLIKE";

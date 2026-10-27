@@ -30,9 +30,9 @@ export default function MovieCard({
     const fetchMovieRating = async () => {
       setIsLoadingRating(true)
       try {
-        const response = (await ratingService.getRatingsByFilm(item.filmId)) as any
+        const response = await ratingService.getRatingsByFilm(item.filmId)
         if (isCurrent && response?.EC === 1) {
-          const result = response.result || response.data?.result
+          const result = response.data?.result
           setAverageRating(result?.averageRating || 0)
         }
       } catch (error) {
@@ -52,9 +52,9 @@ export default function MovieCard({
   const ageRating =
     typeof item.age === "string"
       ? item.age
-      : (item.age as any)?.valueVi || (item.age as any)?.valueEn
+      : item.age?.valueVi || item.age?.valueEn
   const genreLabels = item.genres
-    ?.map((genre: any) =>
+    ?.map((genre) =>
       typeof genre === "string" ? genre : genre?.valueVi || genre?.valueEn || "",
     )
     .filter(Boolean)

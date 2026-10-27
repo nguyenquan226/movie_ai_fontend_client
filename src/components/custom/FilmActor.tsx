@@ -12,9 +12,10 @@ import { useFilmClick } from "@/hooks/handleFiilmClick";
 import { useActorStore } from "@/stores/actorStore";
 import { FilmData } from "@/types/backend.type";
 import { AnimatePresence } from "framer-motion";
+import type { Swiper as SwiperInstance } from "swiper";
 
 export default function FilmActor() {
-    const swiperRef = useRef<any>(null);
+    const swiperRef = useRef<SwiperInstance | null>(null);
     const { goFilmDetail } = useFilmRouter();
     const { handleFilmClick } = useFilmClick();
     const { films } = useActorStore();
@@ -181,7 +182,7 @@ export default function FilmActor() {
         </Tabs>
     );
 }
-function HoverFilmCard({ f, handleFilmClick, thumb }: any) {
+function HoverFilmCard({ f, handleFilmClick, thumb }: { f: FilmData; handleFilmClick: (film: FilmData) => Promise<void>; thumb: string }) {
     const { goFilmDetail } = useFilmRouter();
     const [hovered, setHovered] = useState(false);
 

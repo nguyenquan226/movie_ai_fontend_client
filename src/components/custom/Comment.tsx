@@ -44,6 +44,7 @@ import { Label } from "@/components/ui/label";
 import { formatTimeFromNowVN } from "@/lib/dateFomat";
 import { toast } from "sonner";
 import { CommentServices } from "@/services/commentService";
+import type { CommentItem } from "@/types/comment.type";
 
 export default function CommentSection() {
   const searchParams = useSearchParams();
@@ -154,7 +155,7 @@ export default function CommentSection() {
     countComments(filmId);
   };
 
-  const countReplies = (replies: any[]): number => {
+  const countReplies = (replies: CommentItem[]): number => {
     if (!replies || replies.length === 0) return 0;
     let count = replies.length;
     replies.forEach((rep) => {
@@ -172,9 +173,9 @@ export default function CommentSection() {
     let neededVisible = 0;
     for (const cmt of comments) {
       if (!cmt.replies || cmt.replies.length === 0) continue;
-      const flattened: any[] = [];
-      const flatten = (reps: any[]) => {
-        reps.forEach((r: any) => {
+      const flattened: CommentItem[] = [];
+      const flatten = (reps: CommentItem[]) => {
+        reps.forEach((r) => {
           flattened.push(r);
           if (r.replies && r.replies.length > 0) {
             flatten(r.replies);
@@ -183,7 +184,7 @@ export default function CommentSection() {
       };
       flatten(cmt.replies);
       const index = flattened.findIndex(
-        (rep: any) => String(rep.id) === String(targetId)
+        (rep) => String(rep.id) === String(targetId)
       );
       if (index !== -1) {
         foundParentKey = `${cmt.id}-replies`;
@@ -274,11 +275,11 @@ export default function CommentSection() {
   };
 
 
-  const renderReplies = (replies: any[], parent: any, rootParent: any) => {
+  const renderReplies = (replies: CommentItem[], rootParent: CommentItem) => {
     if (!replies || replies.length === 0) return null;
 
-    const flattenedReplies: any[] = [];
-    const flatten = (reps: any[]) => {
+    const flattenedReplies: CommentItem[] = [];
+    const flatten = (reps: CommentItem[]) => {
       reps.forEach((r) => {
         flattenedReplies.push(r);
         if (r.replies && r.replies.length > 0) {
@@ -880,7 +881,7 @@ export default function CommentSection() {
                     </div>
                   )}
 
-                  {renderReplies(cmt.replies, cmt, cmt)}
+                  {renderReplies(cmt.replies, cmt)}
                 </div>
               ))}
           </div>

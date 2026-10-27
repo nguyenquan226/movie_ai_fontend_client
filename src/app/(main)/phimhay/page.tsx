@@ -6,11 +6,12 @@ import ContentCarousel from "@/components/homepage/content-carousel"
 import { userFavoriteStore } from "@/stores/favoriteStore"
 import { userServices } from "@/services"
 import { useFilmStore } from "@/stores/filmStore"
+import type { FilmDetailRes } from "@/types/filmType"
 
-const getPosterUrl = (film: any): string => {
+const getPosterUrl = (film: FilmDetailRes): string => {
   if (film.posterUrl) return film.posterUrl
   if (film.filmImages && Array.isArray(film.filmImages)) {
-    const posterImage = film.filmImages.find((img: any) => img.type === "poster")
+    const posterImage = film.filmImages.find((img) => img.type === "poster")
     if (posterImage) return posterImage.url
     if (film.filmImages.length > 0) return film.filmImages[0].url
   }
@@ -97,8 +98,8 @@ export default function Home() {
     )
   }
 
-  const transformFilmData = (films: any[]) => {
-    return films.map((film: any) => ({
+  const transformFilmData = (films: FilmDetailRes[]) => {
+    return films.map((film) => ({
       filmId: film.filmId,
       id: film.filmId,
       title: film.title,
@@ -112,12 +113,12 @@ export default function Home() {
       country: film.country,
       genres:
         film.genres
-          ?.map((genre: any) =>
+          ?.map((genre) =>
             typeof genre === "string" ? genre : genre.valueVi || genre.valueEn || genre.keyMap || "",
           )
           .filter(Boolean) || [],
       badges: film.badges || [],
-      episodes: film.partData?.length > 0 ? `${film.partData.length} tập` : undefined,
+      episodes: film.partData?.length ? `${film.partData.length} tập` : undefined,
     }))
   }
 

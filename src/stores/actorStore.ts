@@ -36,8 +36,8 @@ export const useActorStore = create<ActorStoreState & ActorDataAction>()(
       try {
         const res = await actorServices.getActorById(actorId);
         set({ actor: res.data || null });
-      } catch (error: any) {
-        set({ error: error.message || "Error fetching actor details" });
+      } catch (error: unknown) {
+        set({ error: error instanceof Error ? error.message : "Error fetching actor details" });
       } finally {
         set({ isLoadingActor: false });
       }
@@ -48,8 +48,8 @@ export const useActorStore = create<ActorStoreState & ActorDataAction>()(
         const res = await actorServices.getActorBySlug(actorSlug);
         set({ actor: res.data || null });
       }
-      catch (error: any) {
-        set({ error: error.message || "Error fetching actor details" });
+      catch (error: unknown) {
+        set({ error: error instanceof Error ? error.message : "Error fetching actor details" });
       } finally {
         set({ isLoadingActor: false });
       }
@@ -66,8 +66,8 @@ export const useActorStore = create<ActorStoreState & ActorDataAction>()(
           filmActorData: data,
           films,
         });
-      } catch (error: any) {
-        set({ error: error.message || "Error fetching film actor data" });
+      } catch (error: unknown) {
+        set({ error: error instanceof Error ? error.message : "Error fetching film actor data" });
       } finally {
         set({ isLoadingFilmActor: false });
       }
@@ -82,8 +82,8 @@ export const useActorStore = create<ActorStoreState & ActorDataAction>()(
           filmActorData: data,
           films,
         });
-      } catch (error: any) {
-        set({ error: error.message || "Error fetching film actor data" });
+      } catch (error: unknown) {
+        set({ error: error instanceof Error ? error.message : "Error fetching film actor data" });
       } finally {
         set({ isLoadingFilmActor: false });
       }

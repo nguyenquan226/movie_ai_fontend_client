@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { ChevronUp, Funnel } from "lucide-react"
 import { allCodeServie } from "@/services/allCodeService"
 import { useRouter, useSearchParams } from "next/navigation"
+import type { AllCodeRow } from "@/types/allcode.type"
 
 interface FilterState {
     country?: string[]
@@ -16,13 +17,13 @@ interface FilterState {
 }
 
 interface FilterOptions {
-    countries: any[]
-    types: any[]
-    ratings: any[]
-    genres: any[]
-    versions: any[]
-    years: any[]
-    sorts: any[]
+    countries: AllCodeRow[]
+    types: AllCodeRow[]
+    ratings: AllCodeRow[]
+    genres: AllCodeRow[]
+    versions: AllCodeRow[]
+    years: AllCodeRow[]
+    sorts: AllCodeRow[]
 }
 
 interface FilterPanelProps {

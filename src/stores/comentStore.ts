@@ -166,10 +166,10 @@ export const useCommentStore = create<CommentStoreState & CommentStoreActions>(
           meta: data.meta,
           isLoading: false,
         });
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("fetchComments error", error);
         set({
-          error: error?.message || "Error fetching comments",
+          error: error instanceof Error ? error.message : "Error fetching comments",
           isLoading: false,
         });
       }
@@ -212,9 +212,9 @@ export const useCommentStore = create<CommentStoreState & CommentStoreActions>(
             totalComments: (state.totalComments || 0) + 1,
           }));
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("createComment error", error);
-        set({ error: error?.message || "Error creating comment" });
+        set({ error: error instanceof Error ? error.message : "Error creating comment" });
       } finally {
         set({ isLoading: false, replyingTo: null });
       }
@@ -238,10 +238,10 @@ export const useCommentStore = create<CommentStoreState & CommentStoreActions>(
         if (filmId) {
           await get().countComments(filmId);
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("deleteComment error", error);
         set({
-          error: error?.message || "Error deleting comment",
+          error: error instanceof Error ? error.message : "Error deleting comment",
           isLoading: false,
         });
       }
@@ -281,9 +281,9 @@ export const useCommentStore = create<CommentStoreState & CommentStoreActions>(
           ...state,
           comments: updateTree(state.comments),
         }));
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("reactComment error", error);
-        set({ error: error?.message || "Error reacting to comment" });
+        set({ error: error instanceof Error ? error.message : "Error reacting to comment" });
       }
     },
 
@@ -295,9 +295,9 @@ export const useCommentStore = create<CommentStoreState & CommentStoreActions>(
           return;
         }
         set({ totalComments: res.data.totalComments });
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("countComments error", error);
-        set({ error: error?.message || "Error counting comments" });
+        set({ error: error instanceof Error ? error.message : "Error counting comments" });
       }
     },
 

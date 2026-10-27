@@ -48,7 +48,10 @@ export default function ArtPlayerClient({
 
   const playM3u8 = (video: HTMLVideoElement, url: string, art: Artplayer) => {
     if (Hls.isSupported()) {
-      if (art.hls) art.hls.destroy();
+      if (typeof art.hls === "object" && art.hls !== null && "destroy" in art.hls) {
+        const destroyHls = (art.hls as { destroy?: () => void }).destroy;
+        if (typeof destroyHls === "function") destroyHls.call(art.hls);
+      }
 
       const hls = new Hls({
         lowLatencyMode: true,
@@ -91,13 +94,14 @@ export default function ArtPlayerClient({
           html: "Quality",
           icon: '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sliders-horizontal-icon lucide-sliders-horizontal"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></svg>',
           selector: qualities.reverse(),
-          onSelect: function (item: any) {
+          onSelect: function (item) {
             console.log("Select quality: ", item.html);
 
-            if (item.level === -1) {
+            const level = "level" in item && typeof item.level === "number" ? item.level : -1;
+            if (level === -1) {
               hls.currentLevel = -1;
             } else {
-              hls.currentLevel = item.level;
+              hls.currentLevel = level;
             }
 
             return item.html;

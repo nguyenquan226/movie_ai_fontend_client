@@ -1,13 +1,15 @@
 import { ALL_CODE_TYPES } from "@/constants/allCode";
 import publicAxios from "@/lib/publicAxios";
-import { IBackendRes, ICountryData, IGenreData } from "@/types/backend.type";
+import { AllCodeRow, IBackendRes, ICountryData, IGenreData } from "@/types/backend.type";
+
+type AllCodeListResponse = IBackendRes<Record<string, AllCodeRow[]>>;
 
 const baseURL = process.env.NEXT_PUBLIC_API_BACKEND_URL;
 export const allCodeServie = {
   getGenresList: () => {
     return publicAxios.get(
       `${baseURL}/all-codes/type/get-by-type?type=${ALL_CODE_TYPES.GENRE}`
-    ) as Promise<IBackendRes<IGenreData>>;
+    ) as Promise<IBackendRes<IGenreData<unknown>>>;
   },
 
   getCountriesList: () => {
@@ -16,8 +18,8 @@ export const allCodeServie = {
     ) as Promise<IBackendRes<ICountryData>>;
   },
 
-  getAllCodeByType: (type: string) => {
-    return publicAxios.get(`${baseURL}/all-codes/type/get-by-type?type=${type}`) as Promise<IBackendRes<any>>
+  getAllCodeByType: (type: string): Promise<AllCodeListResponse> => {
+    return publicAxios.get(`${baseURL}/all-codes/type/get-by-type?type=${type}`) as Promise<AllCodeListResponse>
   },
 
   getFilterOptions: () => {
