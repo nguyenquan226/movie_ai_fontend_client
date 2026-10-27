@@ -1,0 +1,47 @@
+.hide-scrollbar {
+  overflow: auto; /* hoặc scroll */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE, Edge cũ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.artplayer-app .art-video-player.art-backdrop .art-contextmenus,
+.artplayer-app .art-video-player.art-backdrop .art-info,
+.artplayer-app .art-video-player.art-backdrop .art-settings,
+.artplayer-app .art-video-player.art-backdrop .art-layer-auto-playback,
+.artplayer-app .art-video-player.art-backdrop .art-selector-list,
+.artplayer-app .art-video-player.art-backdrop .art-volume-inner {
+  background-color: rgba(113, 113, 122, 0.2) !important;
+
+  -webkit-backdrop-filter: blur(12px) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+}
+
+.artplayer-app .art-settings {
+  height: auto !important;
+  min-height: 150px !important;
+  min-width: 280px !important;
+  left: 955px !important;
+  padding: 8px 0 !important;
+
+  border-radius: 16px !important;
+  border: 1px solid;
+  border-color: rgba(255, 255, 255, 0.24);
+
+  transition-property: background-color, border-color, color, fill, stroke,
+    opacity, box-shadow, transform;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.art-video-player .art-settings .art-setting-panel {
+  overflow: auto;
+}
+
+.artplayer-app .art-setting-panel .art-setting-item {
+  height: 42px !important;
+  padding: 0 20px !important;
+}
